@@ -18,19 +18,19 @@ pipeline {
 //   agent { label 'master' }
   agent any
 
-//   environment {
-//     // Set path to workspace bin dir
-//     // env.PATH = "${tfHome}:${env.PATH}"
-//     PATH = "${env.WORKSPACE}/bin:${env.PATH}"
-//     // Workspace kube config so we don't affect other Jenkins jobs
-//     KUBECONFIG = "${env.WORKSPACE}/.kube/config"
-//     // def tfHome = tool name: 'terraform'
+  environment {
+    // Set path to workspace bin dir
+    env.PATH = "${tfHome}:${env.PATH}"
+    PATH = "${env.WORKSPACE}/bin:${env.PATH}"
+    // Workspace kube config so we don't affect other Jenkins jobs
+    KUBECONFIG = "${env.WORKSPACE}/.kube/config"
+    def tfHome = tool name: 'terraform'
 
-//   }
+  }
 
-//   tools {
-//     terraform '1.1.7'
-//   }
+  tools {
+    terraform '1.1.7'
+  }
 
   stages {
 
@@ -64,8 +64,8 @@ pipeline {
         stage('tf init plan') {
             steps {
                 script {
-                    def tfHome = tool name: 'terraform'
-                    env.PATH = "${tfHome}:${env.PATH}"
+                    // def tfHome = tool name: 'terraform'
+                    // env.PATH = "${tfHome}:${env.PATH}"
 
                     withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', 
                     credentialsId: params.credential, 
@@ -85,15 +85,17 @@ pipeline {
  
             steps {
                 script {
-                    def tfHome = tool name: 'terraform'
-                    env.PATH = "${tfHome}:${env.PATH}"
+                    // def tfHome = tool name: 'terraform'
+                    // env.PATH = "${tfHome}:${env.PATH}"
                     input "Create/update Terraform stack ${params.dynamo} in aws?" 
 
                     withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', 
                     credentialsId: params.credential, 
                     accessKeyVariable: 'AWS_ACCESS_KEY_ID',  
                     secretKeyVariable: 'AWS_SECRET_ACCESS_KEY']]) {
-                    sh "terraform apply -input=false -auto-approve ${plan}"
+                    sh """
+                        terraform apply -input=false -auto-approve ${plan}
+                       """
                     }
                 }
             }
