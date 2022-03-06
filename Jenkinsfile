@@ -15,17 +15,18 @@ pipeline {
     ansiColor('xterm')
   }
 
-  agent { label 'master' }
+//   agent { label 'master' }
+  agent any
 
-  environment {
-    // Set path to workspace bin dir
-    // env.PATH = "${tfHome}:${env.PATH}"
-    PATH = "${env.WORKSPACE}/bin:${env.PATH}"
-    // Workspace kube config so we don't affect other Jenkins jobs
-    KUBECONFIG = "${env.WORKSPACE}/.kube/config"
-    // def tfHome = tool name: 'terraform'
+//   environment {
+//     // Set path to workspace bin dir
+//     // env.PATH = "${tfHome}:${env.PATH}"
+//     PATH = "${env.WORKSPACE}/bin:${env.PATH}"
+//     // Workspace kube config so we don't affect other Jenkins jobs
+//     KUBECONFIG = "${env.WORKSPACE}/.kube/config"
+//     // def tfHome = tool name: 'terraform'
 
-  }
+//   }
 
 //   tools {
 //     terraform '1.1.7'
