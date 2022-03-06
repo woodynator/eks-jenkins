@@ -72,9 +72,9 @@ pipeline {
                     accessKeyVariable: 'AWS_ACCESS_KEY_ID',  
                     secretKeyVariable: 'AWS_SECRET_ACCESS_KEY']]) {
                         sh """
-                            echo $(pwd)
-                            terraform init
-                            terraform plan -out ${plan}
+                            echo $(pwd) > /tmp/echopwd
+                            // terraform init
+                            // terraform plan -out ${plan}
 
                         """
                     }
@@ -82,26 +82,26 @@ pipeline {
             }
         }
  
-        stage('terraform Apply') {
+        // stage('terraform Apply') {
  
-            steps {
-                script {
-                    // def tfHome = tool name: 'terraform'
-                    // env.PATH = "${tfHome}:${env.PATH}"
-                    input "Create/update Terraform stack ${params.dynamo} in aws?" 
+        //     steps {
+        //         script {
+        //             // def tfHome = tool name: 'terraform'
+        //             // env.PATH = "${tfHome}:${env.PATH}"
+        //             input "Create/update Terraform stack ${params.dynamo} in aws?" 
 
-                    withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', 
-                    credentialsId: params.credential, 
-                    accessKeyVariable: 'AWS_ACCESS_KEY_ID',  
-                    secretKeyVariable: 'AWS_SECRET_ACCESS_KEY']]) {
-                    sh """
-                        terraform apply -input=false -auto-approve ${plan}
-                       """
-                    }
-                }
-            }
+        //             withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', 
+        //             credentialsId: params.credential, 
+        //             accessKeyVariable: 'AWS_ACCESS_KEY_ID',  
+        //             secretKeyVariable: 'AWS_SECRET_ACCESS_KEY']]) {
+        //             sh """
+        //                 terraform apply -input=false -auto-approve ${plan}
+        //                """
+        //             }
+        //         }
+        //     }
             
-        }
+        // }
       }
     }
 }
