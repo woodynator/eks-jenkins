@@ -20,7 +20,7 @@ pipeline {
 
   environment {
     // Set path to workspace bin dir
-    def tfHome = tool name: 'terraform'
+    def tfHome = tool name: 'tf'
     env.PATH = "${tfHome}:${env.PATH}"
     PATH = "${env.WORKSPACE}/bin:${env.PATH}"
     // Workspace kube config so we don't affect other Jenkins jobs
