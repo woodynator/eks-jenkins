@@ -40,7 +40,7 @@ pipeline {
           currentBuild.displayName = "#" + env.BUILD_NUMBER + " " + params.action + " " + params.cluster
           plan = params.dynamo + '.plan'
 
-          //  println "Getting the kubectl and helm binaries..."
+           println "Getting the kubectl and helm binaries..."
           //  (major, minor) = params.k8s_version.split(/\./)
           //  sh """
           //    [ ! -d bin ] && mkdir bin
