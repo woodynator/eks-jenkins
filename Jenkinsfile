@@ -72,9 +72,8 @@ pipeline {
                     accessKeyVariable: 'AWS_ACCESS_KEY_ID',  
                     secretKeyVariable: 'AWS_SECRET_ACCESS_KEY']]) {
                         sh """
-                            echo $(pwd) > /tmp/echopwd
-                            // terraform init
-                            // terraform plan -out ${plan}
+                            terraform init
+                            terraform plan -out ${plan}
 
                         """
                     }
