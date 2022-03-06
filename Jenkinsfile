@@ -12,7 +12,7 @@ pipeline {
     disableConcurrentBuilds()
     timeout(time: 1, unit: 'HOURS')
     withAWS(credentials: params.credential, region: params.region)
-    ansiColor('xterm')
+    // ansiColor('xterm')
   }
 
 //   agent { label 'master' }
@@ -20,8 +20,8 @@ pipeline {
 
   environment {
     // Set path to workspace bin dir
-    def tfHome = tool name: 'tf'
-    env.PATH = "${tfHome}:${env.PATH}"
+    // def tfHome = tool name: 'tf'
+    // env.PATH = "${tfHome}:${env.PATH}"
     PATH = "${env.WORKSPACE}/bin:${env.PATH}"
     // Workspace kube config so we don't affect other Jenkins jobs
     KUBECONFIG = "${env.WORKSPACE}/.kube/config"
