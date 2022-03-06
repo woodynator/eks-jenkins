@@ -63,6 +63,8 @@ pipeline {
         stage('tf init plan') {
             steps {
                 script {
+                    env.PATH = "${tfHome}:${env.PATH}"
+                    def tfHome = tool name: 'terraform'
 
                     withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', 
                     credentialsId: params.credential, 
@@ -82,6 +84,8 @@ pipeline {
  
             steps {
                 script {
+                    env.PATH = "${tfHome}:${env.PATH}"
+                    def tfHome = tool name: 'terraform'
                     input "Create/update Terraform stack ${params.dynamo} in aws?" 
 
                     withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', 
