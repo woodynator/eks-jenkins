@@ -74,7 +74,7 @@ pipeline {
                     secretKeyVariable: 'AWS_SECRET_ACCESS_KEY']]) {
                         sh """
                             terraform init
-                            terraform plan -out ${plan}
+                            terraform plan -no-color -out ${plan}
 
                         """
                     }
@@ -98,7 +98,7 @@ pipeline {
                     accessKeyVariable: 'AWS_ACCESS_KEY_ID',  
                     secretKeyVariable: 'AWS_SECRET_ACCESS_KEY']]) {
                     sh """
-                        terraform apply -input=false -auto-approve ${plan}
+                        terraform apply -no-color -input=false -auto-approve ${plan}
                        """
                     }
                 }
@@ -122,7 +122,7 @@ pipeline {
                     accessKeyVariable: 'AWS_ACCESS_KEY_ID',  
                     secretKeyVariable: 'AWS_SECRET_ACCESS_KEY']]) {
                     sh """
-                        terraform destroy -input=false -auto-approve ${plan}
+                        terraform destroy -no-color -input=false -auto-approve ${plan}
                        """
                     }
                 }
