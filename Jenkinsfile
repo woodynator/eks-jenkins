@@ -38,7 +38,7 @@ pipeline {
           currentBuild.displayName = "#" + env.BUILD_NUMBER + " " + params.action + " " + params.cluster
           plan = params.dynamo + '.plan'
 
-           println "Getting the kubectl and helm binaries..."
+            println "Getting the kubectl and helm binaries..."
           //  (major, minor) = params.k8s_version.split(/\./)
           //  sh """
           //    [ ! -d bin ] && mkdir bin
@@ -73,8 +73,8 @@ pipeline {
                     accessKeyVariable: 'AWS_ACCESS_KEY_ID',  
                     secretKeyVariable: 'AWS_SECRET_ACCESS_KEY']]) {
                         sh """
-                            terraform init
-                            terraform plan -no-color -out ${plan}
+                            echo terraform init
+                            // terraform plan -no-color -out ${plan}
 
                         """
                     }
@@ -98,7 +98,8 @@ pipeline {
                     accessKeyVariable: 'AWS_ACCESS_KEY_ID',  
                     secretKeyVariable: 'AWS_SECRET_ACCESS_KEY']]) {
                     sh """
-                        terraform apply -no-color -input=false -auto-approve ${plan}
+                        // terraform apply -no-color -input=false -auto-approve ${plan}
+                        echo terraform apply
                        """
                     }
                 }
@@ -122,7 +123,8 @@ pipeline {
                     accessKeyVariable: 'AWS_ACCESS_KEY_ID',  
                     secretKeyVariable: 'AWS_SECRET_ACCESS_KEY']]) {
                     sh """
-                        terraform destroy -no-color -input=false -auto-approve
+                        // terraform destroy -no-color -input=false -auto-approve
+                        echo destroy
                        """
                     }
                 }
