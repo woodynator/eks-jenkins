@@ -1,10 +1,10 @@
 pipeline {
    parameters {
-        choice(name: 'action', choices: 'create\ndestroy', description: 'Create/update or destroy the eks cluster.')
+        choice(name: 'action', choices: 'create\ndestroy', description: 'Create/update or destroy the dynamodb table.')
         string(name: 'dynamo', defaultValue : 'dynamotest', description: "dynamoDB table name.")
-        choice(name: 'k8s_version', choices: '1.21\n1.20\n1.19\n1.18\n1.17\n1.16', description: 'K8s version to install.')
+        // choice(name: 'k8s_version', choices: '1.21\n1.20\n1.19\n1.18\n1.17\n1.16', description: 'K8s version to install.')
         string(name: 'credential', defaultValue : 'aws2', description: "Jenkins credential that provides the AWS access key and secret.")
-        string(name: 'region', defaultValue : 'eu-west-1', description: "AWS region.")
+        // string(name: 'region', defaultValue : 'eu-west-1', description: "AWS region.")
 
    }
 
@@ -12,10 +12,8 @@ pipeline {
     disableConcurrentBuilds()
     timeout(time: 1, unit: 'HOURS')
     withAWS(credentials: params.credential, region: params.region)
-    // ansiColor('xterm')
   }
 
-//   agent { label 'master' }
   agent any
 
   environment {
@@ -62,6 +60,9 @@ pipeline {
 
  
         stage('tf init plan') {
+            when {
+                expression { params.action == 'create' }
+            }
             steps {
                 script {
                     // def tfHome = tool name: 'terraform'
@@ -82,6 +83,9 @@ pipeline {
         }
  
         stage('terraform Apply') {
+            when {
+                expression { params.action == 'create' }
+            }
  
             steps {
                 script {
@@ -95,6 +99,30 @@ pipeline {
                     secretKeyVariable: 'AWS_SECRET_ACCESS_KEY']]) {
                     sh """
                         terraform apply -input=false -auto-approve ${plan}
+                       """
+                    }
+                }
+            }
+            
+        }
+
+        stage('terraform Destroy') {
+            when {
+                expression { params.action == 'destroy' }
+            }
+ 
+            steps {
+                script {
+                    // def tfHome = tool name: 'terraform'
+                    // env.PATH = "${tfHome}:${env.PATH}"
+                    input "Destroy Terraform stack ${params.dynamo} in aws?" 
+
+                    withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', 
+                    credentialsId: params.credential, 
+                    accessKeyVariable: 'AWS_ACCESS_KEY_ID',  
+                    secretKeyVariable: 'AWS_SECRET_ACCESS_KEY']]) {
+                    sh """
+                        terraform destroy -input=false -auto-approve ${plan}
                        """
                     }
                 }
